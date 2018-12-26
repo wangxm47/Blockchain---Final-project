@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Auctions</title>
+
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12 col-sm-8 col-sm-push-2">
+          <h1 class="text-center">Auctions</h1>
+          <hr/>
+          <br/>
+        </div>
+      </div>
+      <div id = "add" class="row text-center">
+        <strong>拍卖品:</strong><input id="new_name">
+        <strong>拍卖时间:</strong><input id="new_time"> (单位:minutes)
+        <strong>是否慈善拍卖:</strong><select id="new_charitable" v-on:change="change()"><option>否</option><option>是</option></select>
+        <strong v-if="charitable">慈善组织:</strong><input v-if="charitable" id="new_Charity">
+        <br/>
+        <br/>
+        <button id="new_auction" @click="add_new_auction()">添加新拍卖</button>
+      </div>
+      <hr/>
+      <br/>
+      <div id="AuctionsRow" class="row">
+        <!-- AUCTIONS LOAD HERE -->
+        <ul style="list-style-type:none;">
+          <li v-for="submission in submissions" :key = "submission.id"> 
+              <submission-component
+              :submission="submission"
+              :submissions="submissions">
+              </submission-component>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="js/vue.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/web3.min.js"></script>
+    <script src="js/truffle-contract.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/seed.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>

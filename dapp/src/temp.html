@@ -1,0 +1,72 @@
+<ul style="list-style-type:none;">
+  <li>
+    <div id="AuctionTemplate">
+      <div class="col-sm-6 col-md-4 col-lg-3">
+        <div class="panel panel-default panel-pet">
+          <div class="panel-heading">
+            <h3 class="panel-title">name</h3>
+          </div>
+          <div class="panel-body">
+            <img alt="140x140" data-src="holder.js/140x140" class="img-rounded img-center" style="width: 100%;" src="images/auction.jpg"
+              data-holder-rendered="true">
+            <br /><br />
+            <strong>拍卖者</strong>: <span class="Auctioneer">Auctioneer</span><br />
+            <strong>结束时间</strong>: <span class="auctionEndTime">time</span><br />
+            <strong>当前最高价</strong>: <span class="highestBid">highestBid</span><br /><br />
+            <button class="btn btn-default btn-auction" type="button" data-id="0">出价</button>
+            <button class="btn btn-default btn-end" type="button" data-id="0">结束拍卖</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </li>
+</ul>
+
+<script>
+  markAdopted: function (adopters, account) {
+        App.contracts.Adoption.deployed().then(function (instance) {
+            adoptionInstance = instance;
+
+            // 调用合约的getAdopters(), 用call读取信息不用消耗gas
+            return adoptionInstance.getAdopters.call();
+        }).then(function (adopters) {
+            for (i = 0; i < adopters.length; i++) {
+                if (adopters[i] !== '0x0000000000000000000000000000000000000000') {
+                    $('.panel-pet').eq(i).find('button').text('Success').attr('disabled', true);
+                }
+            }
+        }).catch(function (err) {
+            console.log(err.message);
+        });
+    },
+
+    handleAdopt: function (event) {
+        event.preventDefault();
+
+        var petId = parseInt($(event.target).data('id'));
+
+        var adoptionInstance;
+
+        // 获取用户账号
+        web3.eth.getAccounts(function (error, accounts) {
+            if (error) {
+                console.log(error);
+            }
+
+            var account = accounts[0];
+
+            App.contracts.Adoption.deployed().then(function (instance) {
+                adoptionInstance = instance;
+
+                // 发送交易领养宠物
+                return adoptionInstance.adopt(petId, {
+                    from: account
+                });
+            }).then(function (result) {
+                return App.markAdopted();
+            }).catch(function (err) {
+                console.log(err.message);
+            });
+        });
+    }
+</script>
