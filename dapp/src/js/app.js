@@ -49,7 +49,7 @@ window.App = {
             Seed.submissions.push(auction);
             console.log(Seed.submissions);
         }).catch(function (err) {
-            alert(err.message.substring(err.message.indexOf("revert")+7));
+            alert(err.message);
         })
     },
 
